@@ -1,8 +1,7 @@
 package set;
 
 import exceptions.ValidationException;
-import game.Game;
-import game.IncompletedGameScores;
+import game.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.stream.IntStream;
@@ -16,11 +15,11 @@ class SetTest {
     @Test
     void getScoreMethodsWorkAsExpected() throws ValidationException {
         final var games1 = java.util.Set.of(
-                Game.ofFirstPlayer(),
-                Game.ofSecondPlayer(),
-                Game.ofFirstPlayer(),
-                Game.ofFirstPlayer(),
-                Game.ofIncompletedScore(IncompletedGameScores.FIFTEEN, IncompletedGameScores.FORTY));
+                CompletedGame.ofFirstPlayer(),
+                CompletedGame.ofSecondPlayer(),
+                CompletedGame.ofFirstPlayer(),
+                CompletedGame.ofFirstPlayer(),
+                IncompletedGame.ofScore(IncompletedGameScores.FIFTEEN, IncompletedGameScores.FORTY));
 
         final Set set1 = TieBreakSet.ofGames(games1);
         assertEquals(3, set1.getScoreForFirstPlayer());
@@ -31,11 +30,17 @@ class SetTest {
         assertEquals(6, set2.getScoreForSecondPlayer());
 
         final var games3 = setOfGamesFromScore(4, 0);
-        games3.add(Game.ofIncompletedScore(IncompletedGameScores.THIRTY, IncompletedGameScores.LOVE));
+        games3.add(IncompletedGame.ofScore(IncompletedGameScores.THIRTY, IncompletedGameScores.LOVE));
 
         final Set set3 = DistanceSet.ofGames(games3);
         assertEquals(4, set3.getScoreForFirstPlayer());
         assertEquals(0, set3.getScoreForSecondPlayer());
+
+        final var games4 = setOfGamesFromScore(6, 6);
+        games4.add(TieBreakGame.ofScore(12, 10));
+        final Set set4 = TieBreakSet.ofGames(games4);
+        assertEquals(7, set4.getScoreForFirstPlayer());
+        assertEquals(6, set4.getScoreForSecondPlayer());
     }
 
     @Test
@@ -140,10 +145,10 @@ class SetTest {
 
     private static java.util.Set<Game> setOfGamesFromScore(int firstPlayerScore, int secondPlayerScore) {
         final var fpGames = IntStream.range(0, firstPlayerScore)
-                .mapToObj(i -> Game.ofFirstPlayer())
+                .mapToObj(i -> CompletedGame.ofFirstPlayer())
                 .collect(toSet());
         final var spGames = IntStream.range(0, secondPlayerScore)
-                .mapToObj(i -> Game.ofSecondPlayer())
+                .mapToObj(i -> CompletedGame.ofSecondPlayer())
                 .collect(toSet());
 
         return Stream.concat(fpGames.stream(), spGames.stream())

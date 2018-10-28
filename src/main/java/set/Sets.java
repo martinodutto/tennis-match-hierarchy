@@ -1,8 +1,7 @@
 package set;
 
 import exceptions.ValidationException;
-import game.Game;
-import game.IncompletedGameScores;
+import game.*;
 
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -25,11 +24,19 @@ public class Sets {
 
     public static TieBreakSet tieBreakSetWithIncompletedGame(int firstPlayerScore,
                                                              int secondPlayerScore,
-                                                             IncompletedGameScores score1,
-                                                             IncompletedGameScores score2) throws ValidationException {
+                                                             IncompletedGame incompletedGame) throws ValidationException {
 
         final Set<Game> games = setOfGamesFromScore(firstPlayerScore, secondPlayerScore);
-        games.add(Game.ofIncompletedScore(score1, score2));
+        games.add(incompletedGame);
+
+        return TieBreakSet.ofGames(games);
+    }
+
+    public static TieBreakSet tieBreakSetWithTieBreakGame(int firstPlayerScore,
+                                                          int secondPlayerScore,
+                                                          TieBreakGame tieBreakGame) throws ValidationException {
+        final Set<Game> games = setOfGamesFromScore(firstPlayerScore, secondPlayerScore);
+        games.add(tieBreakGame);
 
         return TieBreakSet.ofGames(games);
     }
@@ -47,17 +54,17 @@ public class Sets {
                                                              IncompletedGameScores score2) throws ValidationException {
 
         final Set<Game> games = setOfGamesFromScore(firstPlayerScore, secondPlayerScore);
-        games.add(Game.ofIncompletedScore(score1, score2));
+        games.add(IncompletedGame.ofScore(score1, score2));
 
         return DistanceSet.ofGames(games);
     }
 
     private static Set<Game> setOfGamesFromScore(int firstPlayerScore, int secondPlayerScore) {
         final var fpGames = IntStream.range(0, firstPlayerScore)
-                .mapToObj(i -> Game.ofFirstPlayer())
+                .mapToObj(i -> CompletedGame.ofFirstPlayer())
                 .collect(toSet());
         final var spGames = IntStream.range(0, secondPlayerScore)
-                .mapToObj(i -> Game.ofSecondPlayer())
+                .mapToObj(i -> CompletedGame.ofSecondPlayer())
                 .collect(toSet());
 
         return Stream.concat(fpGames.stream(), spGames.stream())

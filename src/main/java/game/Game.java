@@ -1,29 +1,20 @@
 package game;
 
+import exceptions.ValidationException;
 import interfaces.Abortable;
+import interfaces.Validable;
 
 import java.util.Objects;
 
-public class Game implements Abortable {
+public abstract class Game implements Abortable, Validable {
 
     private final GameScores score1;
     private final GameScores score2;
 
-    private Game(GameScores score1, GameScores score2) {
+    Game(GameScores score1, GameScores score2) throws ValidationException {
         this.score1 = Objects.requireNonNull(score1, "Invalid null game score");
         this.score2 = Objects.requireNonNull(score2, "Invalid null game score");
-    }
-
-    public static Game ofIncompletedScore(IncompletedGameScores score1, IncompletedGameScores score2) {
-        return new Game(score1, score2);
-    }
-
-    public static Game ofFirstPlayer() {
-        return new Game(CompletedGameScores.WON, CompletedGameScores.LOST);
-    }
-
-    public static Game ofSecondPlayer() {
-        return new Game(CompletedGameScores.LOST, CompletedGameScores.WON);
+        validate();
     }
 
     public GameScores getScore1() {
@@ -34,7 +25,12 @@ public class Game implements Abortable {
         return score2;
     }
 
-    public boolean ended() {
-        return score1 instanceof CompletedGameScores;
+    public abstract boolean wonByFirstPlayer();
+
+    public abstract boolean wonBySecondPlayer();
+
+    @Override
+    public String toString() {
+        return score1 + " - " + score2;
     }
 }

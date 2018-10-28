@@ -1,7 +1,6 @@
 package set;
 
 import exceptions.ValidationException;
-import game.CompletedGameScores;
 import game.Game;
 import interfaces.Abortable;
 import interfaces.Validable;
@@ -24,7 +23,7 @@ public abstract class Set implements Abortable, Validable {
         return games
                 .stream()
                 .filter(Game::ended)
-                .filter(g -> g.getScore1() == CompletedGameScores.WON)
+                .filter(Game::wonByFirstPlayer)
                 .count();
     }
 
@@ -32,7 +31,7 @@ public abstract class Set implements Abortable, Validable {
         return games
                 .stream()
                 .filter(Game::ended)
-                .filter(g -> g.getScore2() == CompletedGameScores.WON)
+                .filter(Game::wonBySecondPlayer)
                 .count();
     }
 
