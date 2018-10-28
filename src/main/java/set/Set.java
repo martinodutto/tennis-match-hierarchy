@@ -19,6 +19,11 @@ public abstract class Set implements Abortable, Validable {
         validate();
     }
 
+    /**
+     * Counts the number of <em>completed</em> games won by the first player, for the current set.
+     *
+     * @return Number of completed games won by the first player.
+     */
     public final long getScoreForFirstPlayer() {
         return games
                 .stream()
@@ -27,6 +32,11 @@ public abstract class Set implements Abortable, Validable {
                 .count();
     }
 
+    /**
+     * Counts the number of <em>completed</em> games won by the second player, for the current set.
+     *
+     * @return Number of completed games won by the second player.
+     */
     public final long getScoreForSecondPlayer() {
         return games
                 .stream()
@@ -35,6 +45,14 @@ public abstract class Set implements Abortable, Validable {
                 .count();
     }
 
+    /**
+     * If the set has completed, returns {@code true} when the winner is the first player.
+     *
+     * <p>This method must be called <em>after</em> verifying that the current set has completed (see {@link #ended()}),
+     * otherwise it will throw an {@link IllegalStateException}, because no winner can be determined.</p>
+     *
+     * @return True iff the winner exists and is the first player.
+     */
     public final boolean wonByFirstPlayer() {
         if (ended()) {
             return getScoreForFirstPlayer() > getScoreForSecondPlayer();
@@ -43,6 +61,14 @@ public abstract class Set implements Abortable, Validable {
         }
     }
 
+    /**
+     * If the set has completed, returns {@code true} when the winner is the second player.
+     *
+     * <p>This method must be called <em>after</em> verifying that the current set has completed (see {@link #ended()}),
+     * otherwise it will throw an {@link IllegalStateException}, because no winner can be determined.</p>
+     *
+     * @return True iff the winner exists and is the second player.
+     */
     public final boolean wonBySecondPlayer() {
         if (ended()) {
             return getScoreForSecondPlayer() > getScoreForFirstPlayer();
@@ -51,11 +77,11 @@ public abstract class Set implements Abortable, Validable {
         }
     }
 
-    public final java.util.Set<Game> getGames() {
+    final java.util.Set<Game> getGames() {
         return games;
     }
 
-    protected boolean allGamesEnded() {
+    boolean allGamesEnded() {
         return games.stream().allMatch(Game::ended);
     }
 
@@ -64,7 +90,7 @@ public abstract class Set implements Abortable, Validable {
      *
      * @return True iff there is at most one unterminated game.
      */
-    protected boolean atMostOneGameIsNonEnded() {
+    boolean atMostOneGameIsNonEnded() {
         return getGames()
                 .stream()
                 .filter(g -> !g.ended())
