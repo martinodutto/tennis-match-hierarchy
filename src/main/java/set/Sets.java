@@ -42,6 +42,17 @@ public class Sets {
         return DistanceSet.ofGames(setOfGamesFromScore(firstPlayerScore, secondPlayerScore));
     }
 
+    public static DistanceSet distanceSetWithIncompletedGame(int firstPlayerScore,
+                                                             int secondPlayerScore,
+                                                             IncompletedGameScores score1,
+                                                             IncompletedGameScores score2) throws ValidationException {
+
+        final Set<Game> games = setOfGamesFromScore(firstPlayerScore, secondPlayerScore);
+        games.add(Game.ofIncompletedScore(score1, score2));
+
+        return DistanceSet.ofGames(games);
+    }
+
     private static Set<Game> setOfGamesFromScore(int firstPlayerScore, int secondPlayerScore) {
         final var fpGames = IntStream.range(0, firstPlayerScore)
                 .mapToObj(i -> Game.ofFirstPlayer())
@@ -49,7 +60,7 @@ public class Sets {
         final var spGames = IntStream.range(0, secondPlayerScore)
                 .mapToObj(i -> Game.ofSecondPlayer())
                 .collect(toList());
-        
+
         return Stream.concat(fpGames.stream(), spGames.stream())
                 .collect(toSet());
     }
