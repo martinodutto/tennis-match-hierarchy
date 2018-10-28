@@ -2,6 +2,7 @@ package set;
 
 import exceptions.ValidationException;
 import game.Game;
+import game.TieBreakGame;
 
 public class TieBreakSet extends Set {
 
@@ -48,10 +49,20 @@ public class TieBreakSet extends Set {
         if (!atMostOneGameIsNonEnded()) {
             throw new ValidationException("All games must be completed with the exception of at most one");
         }
+        if (!atMostOneGameIsATieBreak()) {
+            throw new ValidationException("At most one tie-break is allowed per set");
+        }
     }
 
     private boolean abnormalScore(long score1, long score2) {
         return (score1 == 7 && score2 < 5) || (score1 < 5 && score2 == 7);
+    }
+
+    private boolean atMostOneGameIsATieBreak() {
+        return getGames()
+                .stream()
+                .filter(g -> g instanceof TieBreakGame)
+                .count() <= 1;
     }
 
     @Override
