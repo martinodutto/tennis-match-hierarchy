@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 public class Sets {
@@ -56,10 +55,10 @@ public class Sets {
     private static Set<Game> setOfGamesFromScore(int firstPlayerScore, int secondPlayerScore) {
         final var fpGames = IntStream.range(0, firstPlayerScore)
                 .mapToObj(i -> Game.ofFirstPlayer())
-                .collect(toList());
+                .collect(toSet());
         final var spGames = IntStream.range(0, secondPlayerScore)
                 .mapToObj(i -> Game.ofSecondPlayer())
-                .collect(toList());
+                .collect(toSet());
 
         return Stream.concat(fpGames.stream(), spGames.stream())
                 .collect(toSet());
