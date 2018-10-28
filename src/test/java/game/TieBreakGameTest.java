@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TieBreakGameTest {
 
     @Test
-    void validatesCorrectly() {
+    void validatesAsExpected() {
         // various impossible results
         assertThrows(ValidationException.class, () -> ofScore(1, 8));
         assertThrows(ValidationException.class, () -> ofScore(17, 6));
@@ -91,5 +91,15 @@ class TieBreakGameTest {
         assertFalse(ofScore(6, 8).wonByFirstPlayer());
         assertTrue(ofScore(7, 9).wonBySecondPlayer());
         assertFalse(ofScore(7, 9).wonByFirstPlayer());
+
+        // for uncompleted tie-breaks, it does not make sense to test for winners
+        assertThrows(IllegalStateException.class, () -> ofScore(6, 7).wonByFirstPlayer());
+        assertThrows(IllegalStateException.class, () -> ofScore(6, 7).wonBySecondPlayer());
+        assertThrows(IllegalStateException.class, () -> ofScore(5, 4).wonBySecondPlayer());
+        assertThrows(IllegalStateException.class, () -> ofScore(5, 4).wonByFirstPlayer());
+        assertThrows(IllegalStateException.class, () -> ofScore(18, 19).wonByFirstPlayer());
+        assertThrows(IllegalStateException.class, () -> ofScore(1, 1).wonBySecondPlayer());
+        assertThrows(IllegalStateException.class, () -> ofScore(3, 6).wonByFirstPlayer());
+        assertThrows(IllegalStateException.class, () -> ofScore(8, 7).wonBySecondPlayer());
     }
 }
