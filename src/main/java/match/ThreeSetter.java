@@ -23,14 +23,14 @@ public class ThreeSetter extends Match {
         if (getScoreForFirstPlayer() == 3 || getScoreForSecondPlayer() == 3) {
             throw new ValidationException("No player can win 3 sets on a three-setter");
         }
-        if (!firstNonEndedSetIsTheLast()) {
-            throw new ValidationException("All sets must be completed with the exception of the last one");
+        if (!firstNonTerminatedSetIsTheLast()) {
+            throw new ValidationException("All sets must be completed, with the exception of the last one");
         }
     }
 
     @Override
-    public boolean ended() {
-        return allSetsEnded() &&
+    public boolean terminated() {
+        return allSetsTerminated() &&
                 (getScoreForFirstPlayer() == 2 || getScoreForSecondPlayer() == 2);
     }
 }

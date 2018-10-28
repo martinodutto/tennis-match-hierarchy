@@ -1,7 +1,7 @@
 package match;
 
 import exceptions.ValidationException;
-import interfaces.Abortable;
+import interfaces.Terminable;
 import interfaces.Validable;
 import set.Set;
 
@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import static java.util.Collections.unmodifiableList;
 
-public abstract class Match implements Abortable, Validable {
+public abstract class Match implements Terminable, Validable {
 
     private final List<Set> sets;
 
@@ -38,8 +38,8 @@ public abstract class Match implements Abortable, Validable {
         return sets;
     }
 
-    protected boolean allSetsEnded() {
-        return sets.stream().allMatch(Set::ended);
+    boolean allSetsTerminated() {
+        return sets.stream().allMatch(Set::terminated);
     }
 
     /**
@@ -48,13 +48,13 @@ public abstract class Match implements Abortable, Validable {
      *
      * @return True iff the only (eventual) unterminated set is the last one.
      */
-    protected boolean firstNonEndedSetIsTheLast() {
-        final Optional<Set> firstNonEndedSet = getSets()
+    boolean firstNonTerminatedSetIsTheLast() {
+        final Optional<Set> firstNonTerminatedSet = getSets()
                 .stream()
-                .filter(s -> !s.ended())
+                .filter(s -> !s.terminated())
                 .findFirst();
 
-        return firstNonEndedSet
+        return firstNonTerminatedSet
                 .map(s -> getSets().indexOf(s) == getSets().size() - 1)
                 .orElse(false);
     }

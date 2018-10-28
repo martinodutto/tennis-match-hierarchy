@@ -1,5 +1,10 @@
 package game;
 
+/**
+ * Represents the score of a tie-break game, but <em>uniquely from the point of view of one player</em>.
+ *
+ * <p>This class is immutable.</p>
+ */
 public class TieBreakGameScores implements GameScores {
 
     private long score;

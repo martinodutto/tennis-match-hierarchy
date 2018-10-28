@@ -2,7 +2,7 @@ package set;
 
 import exceptions.ValidationException;
 import game.Game;
-import interfaces.Abortable;
+import interfaces.Terminable;
 import interfaces.Validable;
 
 import java.util.HashSet;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 import static java.util.Collections.unmodifiableSet;
 
-public abstract class Set implements Abortable, Validable {
+public abstract class Set implements Terminable, Validable {
 
     private final java.util.Set<Game> games;
 
@@ -27,7 +27,7 @@ public abstract class Set implements Abortable, Validable {
     public final long getScoreForFirstPlayer() {
         return games
                 .stream()
-                .filter(Game::ended)
+                .filter(Game::terminated)
                 .filter(Game::wonByFirstPlayer)
                 .count();
     }
@@ -40,7 +40,7 @@ public abstract class Set implements Abortable, Validable {
     public final long getScoreForSecondPlayer() {
         return games
                 .stream()
-                .filter(Game::ended)
+                .filter(Game::terminated)
                 .filter(Game::wonBySecondPlayer)
                 .count();
     }
@@ -48,13 +48,13 @@ public abstract class Set implements Abortable, Validable {
     /**
      * If the set has completed, returns {@code true} when the winner is the first player.
      *
-     * <p>This method must be called <em>after</em> verifying that the current set has completed (see {@link #ended()}),
+     * <p>This method must be called <em>after</em> verifying that the current set has completed (see {@link #terminated()}),
      * otherwise it will throw an {@link IllegalStateException}, because no winner can be determined.</p>
      *
      * @return True iff the winner exists and is the first player.
      */
     public final boolean wonByFirstPlayer() {
-        if (ended()) {
+        if (terminated()) {
             return getScoreForFirstPlayer() > getScoreForSecondPlayer();
         } else {
             throw new IllegalStateException("Unterminated set. A winner can't be determined");
@@ -64,13 +64,13 @@ public abstract class Set implements Abortable, Validable {
     /**
      * If the set has completed, returns {@code true} when the winner is the second player.
      *
-     * <p>This method must be called <em>after</em> verifying that the current set has completed (see {@link #ended()}),
+     * <p>This method must be called <em>after</em> verifying that the current set has completed (see {@link #terminated()}),
      * otherwise it will throw an {@link IllegalStateException}, because no winner can be determined.</p>
      *
      * @return True iff the winner exists and is the second player.
      */
     public final boolean wonBySecondPlayer() {
-        if (ended()) {
+        if (terminated()) {
             return getScoreForSecondPlayer() > getScoreForFirstPlayer();
         } else {
             throw new IllegalStateException("Unterminated set. A winner can't be determined");
@@ -81,8 +81,8 @@ public abstract class Set implements Abortable, Validable {
         return games;
     }
 
-    boolean allGamesEnded() {
-        return games.stream().allMatch(Game::ended);
+    boolean allGamesTerminated() {
+        return games.stream().allMatch(Game::terminated);
     }
 
     /**
@@ -90,10 +90,10 @@ public abstract class Set implements Abortable, Validable {
      *
      * @return True iff there is at most one unterminated game.
      */
-    boolean atMostOneGameIsNonEnded() {
+    boolean atMostOneGameIsNonTerminated() {
         return getGames()
                 .stream()
-                .filter(g -> !g.ended())
+                .filter(g -> !g.terminated())
                 .count() <= 1;
     }
 

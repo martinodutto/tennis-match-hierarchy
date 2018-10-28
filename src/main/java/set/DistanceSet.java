@@ -14,11 +14,11 @@ public class DistanceSet extends Set {
     }
 
     @Override
-    public boolean ended() {
+    public boolean terminated() {
         long score1 = getScoreForFirstPlayer();
         long score2 = getScoreForSecondPlayer();
 
-        return allGamesEnded() &&
+        return allGamesTerminated() &&
                 (endedNormally(score1, score2) || endedAtDistance(score1, score2));
     }
 
@@ -42,7 +42,7 @@ public class DistanceSet extends Set {
         if (abnormalScore(score1, score2)) {
             throw new ValidationException("Invalid result for a distance set: " + this);
         }
-        if (!atMostOneGameIsNonEnded()) {
+        if (!atMostOneGameIsNonTerminated()) {
             throw new ValidationException("All games must be completed with the exception of at most one");
         }
     }

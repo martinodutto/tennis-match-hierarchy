@@ -19,7 +19,7 @@ class SetTest {
                 CompletedGame.ofSecondPlayer(),
                 CompletedGame.ofFirstPlayer(),
                 CompletedGame.ofFirstPlayer(),
-                IncompletedGame.ofScore(IncompletedGameScores.FIFTEEN, IncompletedGameScores.FORTY));
+                UncompletedGame.ofScore(UncompletedGameScores.FIFTEEN, UncompletedGameScores.FORTY));
 
         final Set set1 = TieBreakSet.ofGames(games1);
         assertEquals(3, set1.getScoreForFirstPlayer());
@@ -30,7 +30,7 @@ class SetTest {
         assertEquals(6, set2.getScoreForSecondPlayer());
 
         final var games3 = setOfGamesFromScore(4, 0);
-        games3.add(IncompletedGame.ofScore(IncompletedGameScores.THIRTY, IncompletedGameScores.LOVE));
+        games3.add(UncompletedGame.ofScore(UncompletedGameScores.THIRTY, UncompletedGameScores.LOVE));
 
         final Set set3 = DistanceSet.ofGames(games3);
         assertEquals(4, set3.getScoreForFirstPlayer());

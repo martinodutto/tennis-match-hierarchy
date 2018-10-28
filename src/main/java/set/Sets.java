@@ -22,12 +22,12 @@ public class Sets {
         return TieBreakSet.ofGames(setOfGamesFromScore(firstPlayerScore, secondPlayerScore));
     }
 
-    public static TieBreakSet tieBreakSetWithIncompletedGame(int firstPlayerScore,
+    public static TieBreakSet tieBreakSetWithUncompletedGame(int firstPlayerScore,
                                                              int secondPlayerScore,
-                                                             IncompletedGame incompletedGame) throws ValidationException {
+                                                             UncompletedGame uncompletedGame) throws ValidationException {
 
         final Set<Game> games = setOfGamesFromScore(firstPlayerScore, secondPlayerScore);
-        games.add(incompletedGame);
+        games.add(uncompletedGame);
 
         return TieBreakSet.ofGames(games);
     }
@@ -48,13 +48,13 @@ public class Sets {
         return DistanceSet.ofGames(setOfGamesFromScore(firstPlayerScore, secondPlayerScore));
     }
 
-    public static DistanceSet distanceSetWithIncompletedGame(int firstPlayerScore,
+    public static DistanceSet distanceSetWithUncompletedGame(int firstPlayerScore,
                                                              int secondPlayerScore,
-                                                             IncompletedGameScores score1,
-                                                             IncompletedGameScores score2) throws ValidationException {
+                                                             UncompletedGameScores score1,
+                                                             UncompletedGameScores score2) throws ValidationException {
 
         final Set<Game> games = setOfGamesFromScore(firstPlayerScore, secondPlayerScore);
-        games.add(IncompletedGame.ofScore(score1, score2));
+        games.add(UncompletedGame.ofScore(score1, score2));
 
         return DistanceSet.ofGames(games);
     }

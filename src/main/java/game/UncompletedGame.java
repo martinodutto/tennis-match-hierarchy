@@ -2,16 +2,16 @@ package game;
 
 import exceptions.ValidationException;
 
-import static game.IncompletedGameScores.*;
+import static game.UncompletedGameScores.*;
 
-public class IncompletedGame extends Game {
+public class UncompletedGame extends Game {
 
-    private IncompletedGame(IncompletedGameScores scores1, IncompletedGameScores scores2) throws ValidationException {
+    private UncompletedGame(UncompletedGameScores scores1, UncompletedGameScores scores2) throws ValidationException {
         super(scores1, scores2);
     }
 
-    public static IncompletedGame ofScore(IncompletedGameScores score1, IncompletedGameScores score2) throws ValidationException {
-        return new IncompletedGame(score1, score2);
+    public static UncompletedGame ofScore(UncompletedGameScores score1, UncompletedGameScores score2) throws ValidationException {
+        return new UncompletedGame(score1, score2);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class IncompletedGame extends Game {
     }
 
     @Override
-    public boolean ended() {
+    public boolean terminated() {
         // by the very definition of the class
         return false;
     }

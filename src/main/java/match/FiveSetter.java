@@ -23,14 +23,14 @@ public class FiveSetter extends Match {
         if (getScoreForFirstPlayer() >= 4 || getScoreForSecondPlayer() >= 4) {
             throw new ValidationException("No player can win more than 3 sets on a five-setter");
         }
-        if (!firstNonEndedSetIsTheLast()) {
-            throw new ValidationException("All sets must be completed with the exception of the last one");
+        if (!firstNonTerminatedSetIsTheLast()) {
+            throw new ValidationException("All sets must be completed, with the exception of the last one");
         }
     }
 
     @Override
-    public boolean ended() {
-        return allSetsEnded() &&
+    public boolean terminated() {
+        return allSetsTerminated() &&
                 (getScoreForFirstPlayer() == 3 || getScoreForSecondPlayer() == 3);
     }
 }

@@ -1,12 +1,12 @@
 package game;
 
 import exceptions.ValidationException;
-import interfaces.Abortable;
+import interfaces.Terminable;
 import interfaces.Validable;
 
 import java.util.Objects;
 
-public abstract class Game implements Abortable, Validable {
+public abstract class Game implements Terminable, Validable {
 
     private final GameScores score1;
     private final GameScores score2;

@@ -30,7 +30,7 @@ public class CompletedGame extends Game {
     }
 
     @Override
-    public boolean ended() {
+    public boolean terminated() {
         // by the very definition of the class
         return true;
     }
