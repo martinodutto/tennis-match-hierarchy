@@ -1,26 +1,28 @@
 package game;
 
-import interfaces.Durable;
+import interfaces.Abortable;
 
-public class Game implements Durable {
+import java.util.Objects;
+
+public class Game implements Abortable {
 
     private final GameScores score1;
     private final GameScores score2;
 
     private Game(GameScores score1, GameScores score2) {
-        this.score1 = score1;
-        this.score2 = score2;
+        this.score1 = Objects.requireNonNull(score1, "Invalid null game score");
+        this.score2 = Objects.requireNonNull(score2, "Invalid null game score");
     }
 
     public static Game ofIncompletedScore(IncompletedGameScores score1, IncompletedGameScores score2) {
         return new Game(score1, score2);
     }
 
-    public static Game wonByFirstPlayer() {
+    public static Game ofFirstPlayer() {
         return new Game(CompletedGameScores.WON, CompletedGameScores.LOST);
     }
 
-    public static Game wonBySecondPlayer() {
+    public static Game ofSecondPlayer() {
         return new Game(CompletedGameScores.LOST, CompletedGameScores.WON);
     }
 

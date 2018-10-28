@@ -1,4 +1,5 @@
 package game;
 
-public interface GameScores {
+interface GameScores {
+    // just a wrapper
 }

@@ -1,6 +1,6 @@
 package interfaces;
 
-public interface Durable {
+public interface Abortable {
 
     boolean ended();
 }
