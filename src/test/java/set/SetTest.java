@@ -57,7 +57,7 @@ class SetTest {
         assertThrows(IllegalStateException.class, set3::wonByFirstPlayer, "A 3-5 tiebreak set is not terminated");
 
         final DistanceSet set4 = DistanceSet.ofGames(setOfGamesFromScore(6, 7));
-        assertThrows(IllegalStateException.class, set4::wonByFirstPlayer,"A 6-7 distance set is not terminated");
+        assertThrows(IllegalStateException.class, set4::wonByFirstPlayer, "A 6-7 distance set is not terminated");
 
         final TieBreakSet set5 = TieBreakSet.ofGames(setOfGamesFromScore(7, 6));
         assertTrue(set5.wonByFirstPlayer());
@@ -143,7 +143,26 @@ class SetTest {
         assertThrows(IllegalStateException.class, set25::wonByFirstPlayer, "A 12-11 distance set is not terminated");
     }
 
-    private static java.util.Set<Game> setOfGamesFromScore(int firstPlayerScore, int secondPlayerScore) {
+    @Test
+    void allGamesTerminatedWorksAsExpected() throws ValidationException {
+        final TieBreakSet set1 = TieBreakSet.ofGames(setOfGamesFromScore(6, 4));
+        assertTrue(set1.allGamesTerminated());
+
+        final DistanceSet set2 = DistanceSet.ofGames(java.util.Set.of(
+                UncompletedGame.ofScore(UncompletedGameScores.THIRTY, UncompletedGameScores.FIFTEEN),
+                CompletedGame.ofSecondPlayer(),
+                CompletedGame.ofFirstPlayer(),
+                CompletedGame.ofFirstPlayer()
+        ));
+        assertFalse(set2.allGamesTerminated());
+    }
+
+    static java.util.Set<Game> setOfGamesFromScore(int firstPlayerScore, int secondPlayerScore) {
+
+        if (firstPlayerScore < 0 || secondPlayerScore < 0) {
+            throw new IllegalArgumentException("Invalid negative player score");
+        }
+
         final var fpGames = IntStream.range(0, firstPlayerScore)
                 .mapToObj(i -> CompletedGame.ofFirstPlayer())
                 .collect(toSet());

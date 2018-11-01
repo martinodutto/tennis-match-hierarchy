@@ -90,11 +90,18 @@ public abstract class Set implements Terminable, Validable {
      *
      * @return True iff there is at most one unterminated game.
      */
-    boolean atMostOneGameIsNonTerminated() {
+    private boolean atMostOneGameIsNonTerminated() {
         return getGames()
                 .stream()
                 .filter(g -> !g.terminated())
                 .count() <= 1;
+    }
+
+    @Override
+    public void validate() throws ValidationException {
+        if (!atMostOneGameIsNonTerminated()) {
+            throw new ValidationException("All games must be completed with the exception of at most one");
+        }
     }
 
     @Override

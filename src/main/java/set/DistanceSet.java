@@ -42,9 +42,7 @@ public class DistanceSet extends Set {
         if (abnormalScore(score1, score2)) {
             throw new ValidationException("Invalid result for a distance set: " + this);
         }
-        if (!atMostOneGameIsNonTerminated()) {
-            throw new ValidationException("All games must be completed with the exception of at most one");
-        }
+        super.validate();
     }
 
     private boolean abnormalScore(long score1, long score2) {

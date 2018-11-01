@@ -3,6 +3,7 @@ package set;
 import exceptions.ValidationException;
 import game.Game;
 import game.TieBreakGame;
+import game.UncompletedGame;
 
 public class TieBreakSet extends Set {
 
@@ -46,23 +47,27 @@ public class TieBreakSet extends Set {
         if (abnormalScore(score1, score2)) {
             throw new ValidationException("Invalid result for a set: " + this);
         }
-        if (!atMostOneGameIsNonTerminated()) {
-            throw new ValidationException("All games must be completed with the exception of at most one");
+        if (!atMostOneGameIsATieBreakXorIsUncompleted()) {
+            throw new ValidationException("At most one tie-break XOR one uncompleted game is allowed per set");
         }
-        if (!atMostOneGameIsATieBreak()) {
-            throw new ValidationException("At most one tie-break is allowed per set");
-        }
+        super.validate();
     }
 
     private boolean abnormalScore(long score1, long score2) {
         return (score1 == 7 && score2 < 5) || (score1 < 5 && score2 == 7);
     }
 
-    private boolean atMostOneGameIsATieBreak() {
-        return getGames()
+    private boolean atMostOneGameIsATieBreakXorIsUncompleted() {
+        long tiebreaks = getGames()
                 .stream()
                 .filter(g -> g instanceof TieBreakGame)
-                .count() <= 1;
+                .count();
+        long uncompletedGames = getGames()
+                .stream()
+                .filter(g -> g instanceof UncompletedGame)
+                .count();
+
+        return tiebreaks + uncompletedGames <= 1;
     }
 
     @Override
