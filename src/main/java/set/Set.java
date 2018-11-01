@@ -4,13 +4,14 @@ import exceptions.ValidationException;
 import game.Game;
 import interfaces.Terminable;
 import interfaces.Validable;
+import interfaces.Winnable;
 
 import java.util.HashSet;
 import java.util.Optional;
 
 import static java.util.Collections.unmodifiableSet;
 
-public abstract class Set implements Terminable, Validable {
+public abstract class Set implements Terminable, Validable, Winnable {
 
     private final java.util.Set<Game> games;
 
@@ -53,6 +54,7 @@ public abstract class Set implements Terminable, Validable {
      *
      * @return True iff the winner exists and is the first player.
      */
+    @Override
     public final boolean wonByFirstPlayer() {
         if (terminated()) {
             return getScoreForFirstPlayer() > getScoreForSecondPlayer();
@@ -69,6 +71,7 @@ public abstract class Set implements Terminable, Validable {
      *
      * @return True iff the winner exists and is the second player.
      */
+    @Override
     public final boolean wonBySecondPlayer() {
         if (terminated()) {
             return getScoreForSecondPlayer() > getScoreForFirstPlayer();

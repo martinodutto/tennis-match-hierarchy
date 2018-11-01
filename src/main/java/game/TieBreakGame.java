@@ -9,8 +9,8 @@ public class TieBreakGame extends Game {
 
     private TieBreakGame(TieBreakGameScores scores1, TieBreakGameScores scores2) throws ValidationException {
         super(scores1, scores2);
-        this.s1 = Long.valueOf(getScore1().toString());
-        this.s2 = Long.valueOf(getScore2().toString());
+        this.s1 = Long.valueOf(getScoreForFirstPlayer().toString());
+        this.s2 = Long.valueOf(getScoreForSecondPlayer().toString());
     }
 
     public static TieBreakGame ofScore(long score1, long score2) throws ValidationException {
@@ -19,8 +19,8 @@ public class TieBreakGame extends Game {
 
     @Override
     public void validate() throws ValidationException {
-        long s1 = Long.valueOf(getScore1().toString());
-        long s2 = Long.valueOf(getScore2().toString());
+        long s1 = Long.valueOf(getScoreForFirstPlayer().toString());
+        long s2 = Long.valueOf(getScoreForSecondPlayer().toString());
         if (s1 < 0 || s2 < 0) {
             throw new ValidationException("Points in the tie-break must be positive");
         }

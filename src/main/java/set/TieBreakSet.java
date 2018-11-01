@@ -35,6 +35,8 @@ public class TieBreakSet extends Set {
 
     @Override
     public void validate() throws ValidationException {
+        super.validate();
+
         java.util.Set<Game> games = getGames();
         if (games.size() == 0 || games.size() > 13) {
             throw new ValidationException("Invalid number of total games for a tie-break set: " + games.size());
@@ -50,7 +52,6 @@ public class TieBreakSet extends Set {
         if (!atMostOneGameIsATieBreakXorIsUncompleted()) {
             throw new ValidationException("At most one tie-break XOR one uncompleted game is allowed per set");
         }
-        super.validate();
     }
 
     private boolean abnormalScore(long score1, long score2) {

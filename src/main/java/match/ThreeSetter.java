@@ -17,14 +17,13 @@ public class ThreeSetter extends Match {
 
     @Override
     public void validate() throws ValidationException {
+        super.validate();
+
         if (getSets().size() == 0 || getSets().size() > 3) {
             throw new ValidationException("Invalid number of sets for a three-setter: " + getSets().size());
         }
         if (getScoreForFirstPlayer() == 3 || getScoreForSecondPlayer() == 3) {
             throw new ValidationException("No player can win 3 sets on a three-setter");
-        }
-        if (!firstNonTerminatedSetIsTheLast()) {
-            throw new ValidationException("All sets must be completed, with the exception of the last one");
         }
     }
 

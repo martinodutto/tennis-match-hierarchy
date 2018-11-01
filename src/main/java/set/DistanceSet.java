@@ -33,6 +33,8 @@ public class DistanceSet extends Set {
 
     @Override
     public void validate() throws ValidationException {
+        super.validate();
+
         java.util.Set<Game> games = getGames();
         if (games.size() == 0) {
             throw new ValidationException("A distance set must have more than 1 game");
@@ -42,7 +44,6 @@ public class DistanceSet extends Set {
         if (abnormalScore(score1, score2)) {
             throw new ValidationException("Invalid result for a distance set: " + this);
         }
-        super.validate();
     }
 
     private boolean abnormalScore(long score1, long score2) {

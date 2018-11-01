@@ -37,11 +37,11 @@ public class CompletedGame extends Game {
 
     @Override
     public boolean wonByFirstPlayer() {
-        return getScore1() == CompletedGameScores.WON;
+        return getScoreForFirstPlayer() == CompletedGameScores.WON;
     }
 
     @Override
     public boolean wonBySecondPlayer() {
-        return getScore2() == CompletedGameScores.WON;
+        return getScoreForSecondPlayer() == CompletedGameScores.WON;
     }
 }

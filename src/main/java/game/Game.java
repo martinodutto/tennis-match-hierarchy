@@ -3,10 +3,11 @@ package game;
 import exceptions.ValidationException;
 import interfaces.Terminable;
 import interfaces.Validable;
+import interfaces.Winnable;
 
 import java.util.Objects;
 
-public abstract class Game implements Terminable, Validable {
+public abstract class Game implements Terminable, Validable, Winnable {
 
     private final GameScores score1;
     private final GameScores score2;
@@ -17,17 +18,13 @@ public abstract class Game implements Terminable, Validable {
         validate();
     }
 
-    public GameScores getScore1() {
+    public GameScores getScoreForFirstPlayer() {
         return score1;
     }
 
-    public GameScores getScore2() {
+    public GameScores getScoreForSecondPlayer() {
         return score2;
     }
-
-    public abstract boolean wonByFirstPlayer();
-
-    public abstract boolean wonBySecondPlayer();
 
     @Override
     public String toString() {

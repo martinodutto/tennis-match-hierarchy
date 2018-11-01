@@ -3,6 +3,7 @@ package match;
 import exceptions.ValidationException;
 import interfaces.Terminable;
 import interfaces.Validable;
+import interfaces.Winnable;
 import set.Set;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 import static java.util.Collections.unmodifiableList;
 
-public abstract class Match implements Terminable, Validable {
+public abstract class Match implements Terminable, Validable, Winnable {
 
     private final List<Set> sets;
 
@@ -23,6 +24,7 @@ public abstract class Match implements Terminable, Validable {
     public final long getScoreForFirstPlayer() {
         return sets
                 .stream()
+                .filter(Set::terminated)
                 .filter(Set::wonByFirstPlayer)
                 .count();
     }
@@ -30,8 +32,27 @@ public abstract class Match implements Terminable, Validable {
     public final long getScoreForSecondPlayer() {
         return sets
                 .stream()
+                .filter(Set::terminated)
                 .filter(Set::wonBySecondPlayer)
                 .count();
+    }
+
+    @Override
+    public final boolean wonByFirstPlayer() {
+        if (terminated()) {
+            return getScoreForFirstPlayer() > getScoreForSecondPlayer();
+        } else {
+            throw new IllegalStateException("Unterminated match. A winner can't be determined");
+        }
+    }
+
+    @Override
+    public final boolean wonBySecondPlayer() {
+        if (terminated()) {
+            return getScoreForSecondPlayer() > getScoreForFirstPlayer();
+        } else {
+            throw new IllegalStateException("Unterminated match. A winner can't be determined");
+        }
     }
 
     public final List<Set> getSets() {
@@ -48,7 +69,7 @@ public abstract class Match implements Terminable, Validable {
      *
      * @return True iff the only (eventual) unterminated set is the last one.
      */
-    boolean firstNonTerminatedSetIsTheLast() {
+    private boolean firstNonTerminatedSetIsTheLast() {
         final Optional<Set> firstNonTerminatedSet = getSets()
                 .stream()
                 .filter(s -> !s.terminated())
@@ -56,6 +77,13 @@ public abstract class Match implements Terminable, Validable {
 
         return firstNonTerminatedSet
                 .map(s -> getSets().indexOf(s) == getSets().size() - 1)
-                .orElse(false);
+                .orElse(true);
+    }
+
+    @Override
+    public void validate() throws ValidationException {
+        if (!firstNonTerminatedSetIsTheLast()) {
+            throw new ValidationException("All sets must be completed, with the exception of the last one");
+        }
     }
 }

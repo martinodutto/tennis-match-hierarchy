@@ -16,8 +16,8 @@ public class UncompletedGame extends Game {
 
     @Override
     public void validate() throws ValidationException {
-        var score1 = getScore1();
-        var score2 = getScore2();
+        var score1 = getScoreForFirstPlayer();
+        var score2 = getScoreForSecondPlayer();
         if (score1 == LOVE && score2 == LOVE) {
             throw new ValidationException("Empty game is not allowed");
         }
