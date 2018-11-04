@@ -59,7 +59,7 @@ class SetTest {
         final DistanceSet set4 = DistanceSet.ofGames(setOfGamesFromScore(6, 7));
         assertThrows(IllegalStateException.class, set4::wonByFirstPlayer, "A 6-7 distance set is not terminated");
 
-        final TieBreakSet set5 = TieBreakSet.ofGames(setOfGamesFromScore(7, 6));
+        final TieBreakSet set5 = TieBreakSet.ofGames(setOfGamesFromScore(7, 6, true));
         assertTrue(set5.wonByFirstPlayer());
         assertFalse(set5.wonBySecondPlayer());
 
@@ -158,17 +158,46 @@ class SetTest {
     }
 
     static java.util.Set<Game> setOfGamesFromScore(int firstPlayerScore, int secondPlayerScore) {
+        return setOfGamesFromScore(firstPlayerScore, secondPlayerScore, false);
+    }
+
+    static java.util.Set<Game> setOfGamesFromScore(int firstPlayerScore, int secondPlayerScore, boolean withTiebreakGame) {
 
         if (firstPlayerScore < 0 || secondPlayerScore < 0) {
             throw new IllegalArgumentException("Invalid negative player score");
         }
 
-        final var fpGames = IntStream.range(0, firstPlayerScore)
-                .mapToObj(i -> CompletedGame.ofFirstPlayer())
-                .collect(toSet());
-        final var spGames = IntStream.range(0, secondPlayerScore)
-                .mapToObj(i -> CompletedGame.ofSecondPlayer())
-                .collect(toSet());
+        final java.util.Set<Game> fpGames;
+        if (withTiebreakGame && firstPlayerScore == 7) {
+            fpGames = IntStream.range(0, firstPlayerScore - 1)
+                    .mapToObj(i -> CompletedGame.ofFirstPlayer())
+                    .collect(toSet());
+            try {
+                fpGames.add(TieBreakGame.ofScore(7, 5));
+            } catch (ValidationException e) {
+                // should never happen
+            }
+        } else {
+            fpGames = IntStream.range(0, firstPlayerScore)
+                    .mapToObj(i -> CompletedGame.ofFirstPlayer())
+                    .collect(toSet());
+        }
+
+        final java.util.Set<Game> spGames;
+        if (withTiebreakGame && secondPlayerScore == 7) {
+            spGames = IntStream.range(0, secondPlayerScore - 1)
+                    .mapToObj(i -> CompletedGame.ofSecondPlayer())
+                    .collect(toSet());
+            try {
+                spGames.add(TieBreakGame.ofScore(5, 7));
+            } catch (ValidationException e) {
+                // should never happen
+            }
+        } else {
+            spGames = IntStream.range(0, secondPlayerScore)
+                    .mapToObj(i -> CompletedGame.ofSecondPlayer())
+                    .collect(toSet());
+        }
 
         return Stream.concat(fpGames.stream(), spGames.stream())
                 .collect(toSet());

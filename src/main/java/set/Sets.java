@@ -19,6 +19,9 @@ public class Sets {
         if (firstPlayerScore < 0 || secondPlayerScore < 0) {
             throw new IllegalArgumentException("Invalid negative number of games won by a player");
         }
+        if ((firstPlayerScore == 7 && secondPlayerScore == 6) || (firstPlayerScore == 6 && secondPlayerScore == 7)) {
+            throw new UnsupportedOperationException("Wrong method called: use #tieBreakSetWithTieBreakGame instead");
+        }
         return TieBreakSet.ofGames(setOfGamesFromScore(firstPlayerScore, secondPlayerScore));
     }
 
@@ -32,10 +35,8 @@ public class Sets {
         return TieBreakSet.ofGames(games);
     }
 
-    public static TieBreakSet tieBreakSetWithTieBreakGame(int firstPlayerScore,
-                                                          int secondPlayerScore,
-                                                          TieBreakGame tieBreakGame) throws ValidationException {
-        final Set<Game> games = setOfGamesFromScore(firstPlayerScore, secondPlayerScore);
+    public static TieBreakSet tieBreakSetWithTieBreakGame(TieBreakGame tieBreakGame) throws ValidationException {
+        final Set<Game> games = setOfGamesFromScore(6, 6);
         games.add(tieBreakGame);
 
         return TieBreakSet.ofGames(games);

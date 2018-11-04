@@ -2,8 +2,11 @@ package set;
 
 import exceptions.ValidationException;
 import game.Game;
+import game.GameScores;
 import game.TieBreakGame;
 import game.UncompletedGame;
+
+import java.util.Optional;
 
 public class TieBreakSet extends Set {
 
@@ -52,6 +55,9 @@ public class TieBreakSet extends Set {
         if (!atMostOneGameIsATieBreakXorIsUncompleted()) {
             throw new ValidationException("At most one tie-break XOR one uncompleted game is allowed per set");
         }
+        if (endedWithTieBreak(score1, score2) && getGames().stream().filter(g -> g instanceof TieBreakGame).count() < 1) {
+            throw new ValidationException("A set ended with a tiebreak must contain one such game");
+        }
     }
 
     private boolean abnormalScore(long score1, long score2) {
@@ -71,8 +77,24 @@ public class TieBreakSet extends Set {
         return tiebreaks + uncompletedGames <= 1;
     }
 
+    private GameScores getLoserTiebreakScore() {
+        final Optional<Game> tiebreak = getGames()
+                .stream()
+                .filter(g -> g instanceof TieBreakGame)
+                .findFirst();
+
+        if (!tiebreak.isPresent()) {
+            throw new IllegalStateException("Can't determine the tiebreak result if it didn't occur");
+        }
+
+        final Game tieBreakGame = tiebreak.get();
+
+        return wonByFirstPlayer() ? tieBreakGame.getScoreForSecondPlayer() : tieBreakGame.getScoreForFirstPlayer();
+    }
+
     @Override
     public String toString() {
-        return super.toString();
+        boolean endedWithTieBreak = endedWithTieBreak(getScoreForFirstPlayer(), getScoreForSecondPlayer());
+        return super.toString() + (endedWithTieBreak ? " (" + getLoserTiebreakScore() + ")" : "");
     }
 }

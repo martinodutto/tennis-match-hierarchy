@@ -32,8 +32,8 @@ class TieBreakSetTest {
         // finished sets
         assertTrue(ofGames(setOfGamesFromScore(6, 2)).terminated());
         assertTrue(ofGames(setOfGamesFromScore(4, 6)).terminated());
-        assertTrue(ofGames(setOfGamesFromScore(7, 6)).terminated());
-        assertTrue(ofGames(setOfGamesFromScore(6, 7)).terminated());
+        assertTrue(ofGames(setOfGamesFromScore(7, 6, true)).terminated());
+        assertTrue(ofGames(setOfGamesFromScore(6, 7, true)).terminated());
         assertTrue(ofGames(setOfGamesFromScore(0, 6)).terminated());
     }
 
@@ -63,7 +63,7 @@ class TieBreakSetTest {
 
         // these instances should validate
         ofGames(setOfGamesFromScore(6, 5));
-        ofGames(setOfGamesFromScore(6, 7));
+        ofGames(setOfGamesFromScore(6, 7, true));
         ofGames(setOfGamesFromScore(2, 6));
         ofGames(setOfGamesFromScore(3, 0));
     }
